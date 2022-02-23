@@ -15292,6 +15292,7 @@ const dictionary = [
 ];
 const WORD_LENGTH = 5
 const guessGrid = document.querySelector("[data-guess-grid]")
+const alertContainer = document.querySelector("[data-alert-container]")
 const releaseDate = new Date(2022,1,22) //22-2-2022
 const msOffset = Date.now() - releaseDate
 const dayOffset = msOffset / 1000 / 60 / 60 / 24
@@ -15325,7 +15326,7 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
-  if (e.key == "enter") {
+  if (e.key == "Enter") {
     submitGuess();
     return;
   }
@@ -15370,3 +15371,25 @@ function getActiveTiles(){
     return guessGrid.querySelectorAll('[data-state="active"]')
 }
 
+function showAlert(message, duration=1000){
+    const alert = document.createElement("div")
+    alert.textContent = message
+    alert.classList.add("alert")
+    alertContainer.prepend(alert)
+    if(duration == null) return
+    setTimeout(() => {
+        alert.classList.add("hide")
+        alert.addEventListener("transitionend", ()=>{
+            alert.remove()
+        })
+    }, duration)
+}
+
+function shakeTiles(tiles){
+    tiles.forEach(tile => {
+        tile.classList.add("shake")
+        tile.addEventListener("animationend", ()=>{
+            tile.classList.remove("shake")
+        }, {once: true})
+    })
+}
